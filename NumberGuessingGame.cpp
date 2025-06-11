@@ -13,6 +13,7 @@ const int HARD_ID = 3;
 const int EASY_CHANCES = 10;
 const int MEDIUM_CHANCES = 5;
 const int HARD_CHANCES = 3;
+
 ///// Forward Declaration
 
 void printInstruction() {
