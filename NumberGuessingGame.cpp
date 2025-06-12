@@ -86,29 +86,27 @@ void startGame(int &diffLevel, int &SecretNum) {
   }
 
   int guess;
-  int attempts = 1;
+  int attempts = 0;
   bool finished = false;
 
-  guess = validDiff(0, 100);
   while (!finished && attempts < chances) {
+    guess = validDiff(0, 100);
+    attempts++;
     if (guess > SecretNum) {
-      ++attempts;
       cout << "Incorrect! The number is less than " << guess << ".\n";
-      guess = validDiff(0, 100);
       continue;
     } else if (guess < SecretNum) {
-      ++attempts;
       cout << "Incorrect! The number is greater than " << guess << ".\n";
-      guess = validDiff(0, 100);
       continue;
     } else if (guess == SecretNum) {
-      ++attempts;
-      cout << "Congratulations! You guessed the correct  number in " << attempts
+      cout << "Congratulations! You guessed the correct number in " << attempts
            << " attempts.\n";
       finished = true;
+      return;
     }
   }
   cout << "Too many attemps, you lose!\n";
+  cout << "The number was " << SecretNum << endl;
 }
 
 void GameLoop() {
