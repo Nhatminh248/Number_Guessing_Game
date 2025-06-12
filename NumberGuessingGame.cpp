@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-const int NUM_MIN = 1;
+const int NUM_MIN = 0;
 const int NUM_MAX = 100;
 
 const int EASY_ID = 1;
@@ -21,7 +21,7 @@ void printInstruction() {
   cout << "I'm thinking of a number between 1 and 100.\n\n";
 }
 
-int validDiff(int easy_id, int hard_id) {
+int validDiff(int start_id, int end_id) {
   string input;
   int value;
   while (true) {
@@ -29,11 +29,12 @@ int validDiff(int easy_id, int hard_id) {
     getline(cin, input);
 
     stringstream ss(input);
-    if ((ss >> value) && !(ss >> input) && value >= easy_id &&
-        value <= hard_id) {
+    if ((ss >> value) && !(ss >> input) && value >= start_id &&
+        value <= end_id) {
       return value;
     }
-    cout << "Invalid input. Value must be from 1 to 3.\n";
+    cout << "Invalid input. Value must be from " << start_id << " to " << end_id
+         << "\n";
   }
 }
 int diffSelection() {
@@ -74,10 +75,7 @@ int generateNum() {
   return SecretNum;
 }
 
-void validGuess() {}
-
-void compareGuess() {}
-void readInput(int &diffLevel, int &SecretNum) {
+void startGame(int &diffLevel, int &SecretNum) {
   int chances = 0;
   if (diffLevel == 1) {
     chances = EASY_CHANCES;
@@ -88,19 +86,29 @@ void readInput(int &diffLevel, int &SecretNum) {
   }
 
   int guess;
-  int attempts;
+  int attempts = 1;
+  bool finished = false;
 
-  cout << "Enter your guess: ";
-  cin >> guess;
-  cout << "\n";
-  if (guess > SecretNum) {
-    cout << "Incorrect! The number is less than " << guess << ".\n";
-  } else if (guess < SecretNum) {
-    cout << "Incorrect! The number is greater than " << guess << ".\n";
-  } else if (guess == SecretNum) {
-    cout << "Congratulations! You guessed the correct  number in " << attempts
-         << " attempts.\n";
+  guess = validDiff(0, 100);
+  while (!finished && attempts < chances) {
+    if (guess > SecretNum) {
+      ++attempts;
+      cout << "Incorrect! The number is less than " << guess << ".\n";
+      guess = validDiff(0, 100);
+      continue;
+    } else if (guess < SecretNum) {
+      ++attempts;
+      cout << "Incorrect! The number is greater than " << guess << ".\n";
+      guess = validDiff(0, 100);
+      continue;
+    } else if (guess == SecretNum) {
+      ++attempts;
+      cout << "Congratulations! You guessed the correct  number in " << attempts
+           << " attempts.\n";
+      finished = true;
+    }
   }
+  cout << "Too many attemps, you lose!\n";
 }
 
 void GameLoop() {
@@ -108,7 +116,7 @@ void GameLoop() {
   printInstruction();
   diffLevel = diffSelection();
   SecrectNum = generateNum();
-  readInput(diffLevel, SecrectNum);
+  startGame(diffLevel, SecrectNum);
 }
 
 int main() {
