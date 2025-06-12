@@ -21,7 +21,7 @@ void printInstruction() {
   cout << "I'm thinking of a number between 1 and 100.\n\n";
 }
 
-int validDiff(int start_id, int end_id) {
+int validInput(int start_id, int end_id) {
   string input;
   int value;
   while (true) {
@@ -44,7 +44,7 @@ int diffSelection() {
   cout << "2. Medium (5 chances)\n";
   cout << "3. Hard (3 chances)\n\n";
 
-  diffLevel = validDiff(EASY_ID, HARD_ID);
+  diffLevel = validInput(EASY_ID, HARD_ID);
 
   cout << "\n";
 
@@ -90,7 +90,7 @@ void startGame(int &diffLevel, int &SecretNum) {
   bool finished = false;
 
   while (!finished && attempts < chances) {
-    guess = validDiff(0, 100);
+    guess = validInput(NUM_MIN, NUM_MAX);
     attempts++;
     if (guess > SecretNum) {
       cout << "Incorrect! The number is less than " << guess << ".\n";
