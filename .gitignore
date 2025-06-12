@@ -1,0 +1,70 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Thumbnails
+._*
+
+# macOS specific folders
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# C++ build artifacts
+*.o
+*.obj
+*.so
+*.dll
+*.exe
+*.out
+*.a
+*.lib
+
+# CMake build folders
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build/
+Debug/
+Release/
+
+# CLion / JetBrains IDE
+.idea/
+
+# Xcode project files (if ever used for C++)
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# VSCode settings
+.vscode/
+
+# Backup files
+*~
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+
+# Coverage reports
+*.gcno
+*.gcda
+*.gcov
+
+# Test result files
+test_results/
+
+# Compiler generated files
+core
+vgcore.*
+*.stackdump
