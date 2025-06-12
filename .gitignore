@@ -68,3 +68,4 @@ test_results/
 core
 vgcore.*
 *.stackdump
+NumberGuessingGame
