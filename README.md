@@ -1,5 +1,5 @@
 # Number Guessing Game
-
+This is an implementation for the Number Guessing Game on Roadmap.sh Project ideas.
 ## Requirements
 It is a CLI-based game, so you need to use the command line to interact with the game. The game should work as follows:
 - When the game starts, it should display a welcome message along with the rules of the game.
@@ -10,4 +10,6 @@ It is a CLI-based game, so you need to use the command line to interact with the
 - If the user’s guess is incorrect, the game should display a message indicating whether the number is greater or less than the user’s guess.
 - The game should end when the user guesses the correct number or runs out of chances.
 
+Repo URL: [link](https://github.com/Nhatminh248/Number_Guessing_Game.git)
+Project URL: [link](https://roadmap.sh/projects/number-guessing-game)
 
