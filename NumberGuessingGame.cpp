@@ -110,6 +110,10 @@ int getChancesLevel(int level) {
 }
 
 bool guessGuessingRound(int secret, int chances) {
+  using namespace std::chrono;
+
+  auto start = high_resolution_clock::now();
+
   for (int attempts = 1; attempts <= chances; attempts++) {
     int guess = validInput(NUM_MIN, NUM_MAX);
     if (guess > secret)
@@ -117,14 +121,23 @@ bool guessGuessingRound(int secret, int chances) {
     else if (guess < secret)
       cout << "Incorrect! The number is greater than " << guess << ".\n";
     else {
+      auto end = high_resolution_clock::now();
+      auto duration = duration_cast<seconds>(end - start).count();
       cout << "Congratulations! You guessed the correct number in " << attempts
            << " attempts.\n";
+
+      cout << "Time taken: " << duration << " seconds.\n";
       return true;
     }
     cout << "Remaining attempts: " << (chances - attempts) << "\n";
   }
+
+  auto end = high_resolution_clock::now();
+  auto duration = duration_cast<seconds>(end - start).count();
+
   cout << "Too many attemps, you lose!\n";
   cout << "The number was " << secret << endl;
+  cout << "Time taken: " << duration << " seconds.\n";
   return false;
 }
 
