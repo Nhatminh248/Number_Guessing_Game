@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 #include <random>
 #include <sstream>
@@ -14,13 +15,9 @@ const int EASY_CHANCES = 10;
 const int MEDIUM_CHANCES = 5;
 const int HARD_CHANCES = 3;
 
-///// Forward Declaration
+enum Difficulty { Easy = 1, Medium, Hard };
 
-void printInstruction() {
-  cout << "Welcome to the Number Guessing Game! \n";
-  cout << "I'm thinking of a number between 1 and 100.\n\n";
-}
-
+// Helper functions
 int validInput(int start_id, int end_id) {
   string input;
   int value;
@@ -37,6 +34,36 @@ int validInput(int start_id, int end_id) {
          << "\n";
   }
 }
+bool validContInput() {
+  string input;
+
+  while (true) {
+    cout << "Do you want to continue? [Y/n]: \n";
+
+    getline(cin, input);
+
+    input.erase(remove_if(input.begin(), input.end(), ::isspace), input.end());
+    transform(input.begin(), input.end(), input.begin(), ::tolower);
+
+    if (input == "y")
+      return true;
+    if (input == "n")
+      return false;
+
+    cout << "Invalid input, please enter Y for yes, N for no only.\n";
+  }
+}
+
+// Game functions
+
+void printInstruction() {
+  cout << "--------------------------------------------------\n";
+  cout << "Welcome to the Number Guessing Game! \n";
+  cout << "I'm thinking of a number between 1 and 100.\n";
+  cout << "Your mission is to guess that random number!\n";
+  cout << "--------------------------------------------------\n";
+}
+
 int diffSelection() {
   int diffLevel;
   cout << "Please select the difficult level:\n";
@@ -44,21 +71,19 @@ int diffSelection() {
   cout << "2. Medium (5 chances)\n";
   cout << "3. Hard (3 chances)\n\n";
 
-  diffLevel = validInput(EASY_ID, HARD_ID);
+  diffLevel = validInput(Easy, Hard);
 
   cout << "\n";
 
   switch (diffLevel) {
-  case 1:
+  case Easy:
     cout << "Great! You have selected the Easy difficulty level.\n";
     break;
-  case 2:
+  case Medium:
     cout << "Great! You have selected the Medium difficulty level.\n";
     break;
-  case 3:
+  case Hard:
     cout << "Great! You have selected the Hard difficulty level.\n";
-    break;
-  default:
     break;
   }
 
@@ -67,57 +92,59 @@ int diffSelection() {
 }
 
 int generateNum() {
-  random_device rd;
-  mt19937 gen(rd());
+  static random_device rd;
+  static mt19937 gen(rd());
   uniform_int_distribution<> dist(NUM_MIN, NUM_MAX);
-
-  int SecretNum = dist(gen);
-  return SecretNum;
+  return dist(gen);
 }
 
-void startGame(int &diffLevel, int &SecretNum) {
-  int chances = 0;
-  if (diffLevel == 1) {
-    chances = EASY_CHANCES;
-  } else if (diffLevel == 2) {
-    chances = MEDIUM_CHANCES;
-  } else if (diffLevel == 3) {
-    chances = HARD_CHANCES;
+int getChancesLevel(int level) {
+  switch (level) {
+  case Easy:
+    return EASY_CHANCES;
+  case Hard:
+    return HARD_CHANCES;
+  default:
+    return MEDIUM_CHANCES;
   }
+}
 
-  int guess;
-  int attempts = 0;
-  bool finished = false;
-
-  while (!finished && attempts < chances) {
-    guess = validInput(NUM_MIN, NUM_MAX);
-    attempts++;
-    if (guess > SecretNum) {
+bool guessGuessingRound(int secret, int chances) {
+  for (int attempts = 1; attempts <= chances; attempts++) {
+    int guess = validInput(NUM_MIN, NUM_MAX);
+    if (guess > secret)
       cout << "Incorrect! The number is less than " << guess << ".\n";
-      continue;
-    } else if (guess < SecretNum) {
+    else if (guess < secret)
       cout << "Incorrect! The number is greater than " << guess << ".\n";
-      continue;
-    } else if (guess == SecretNum) {
+    else {
       cout << "Congratulations! You guessed the correct number in " << attempts
            << " attempts.\n";
-      finished = true;
-      return;
+      return true;
     }
+    cout << "Remaining attempts: " << (chances - attempts) << "\n";
   }
   cout << "Too many attemps, you lose!\n";
-  cout << "The number was " << SecretNum << endl;
+  cout << "The number was " << secret << endl;
+  return false;
 }
 
-void GameLoop() {
-  int diffLevel, SecrectNum;
+void startGame() {
+  int diffLevel, secret;
+  secret = generateNum();
   printInstruction();
   diffLevel = diffSelection();
-  SecrectNum = generateNum();
-  startGame(diffLevel, SecrectNum);
+  int chances = getChancesLevel(diffLevel);
+  int guess;
+  int attempts = 0;
+  cout << "You have " << chances << " attempts. Good Luck!\n\n";
+  guessGuessingRound(secret, chances);
 }
 
 int main() {
-  GameLoop();
+  bool isContinue = true;
+  while (isContinue) {
+    startGame();
+    isContinue = validContInput();
+  }
   return 0;
 }
